@@ -44,4 +44,13 @@ public class EmployeeService {
 
         return employeeRepository.save(existingEmployee);
     }
+
+    public void deleteEmployee(String id) {
+
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() ->
+                        new EmployeeNotFoundException("Employee not found with id: " + id));
+
+        employeeRepository.delete(employee);
+    }
 }
