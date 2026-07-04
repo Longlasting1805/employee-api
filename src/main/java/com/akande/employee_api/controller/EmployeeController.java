@@ -5,6 +5,9 @@ import com.akande.employee_api.service.EmployeeService;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import com.akande.employee_api.exception.EmployeeNotFoundException;
+import com.akande.employee_api.dto.EmployeeRequest;
+import com.akande.employee_api.dto.EmployeeResponse;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/employees")
@@ -17,7 +20,7 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public Employee createEmployee(@RequestBody Employee employee) {
+    public EmployeeResponse saveEmployee(@Valid @RequestBody EmployeeRequest employee) {
         return employeeService.saveEmployee(employee);
     }
 

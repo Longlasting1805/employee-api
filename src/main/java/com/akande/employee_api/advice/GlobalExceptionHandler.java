@@ -1,5 +1,7 @@
 package com.akande.employee_api.advice;
 
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.validation.FieldError;
 import com.akande.employee_api.exception.EmployeeNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,5 +26,27 @@ public class GlobalExceptionHandler {
         error.put("message", ex.getMessage());
 
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, Object>> handleValidationException(
+            MethodArgumentNotValidException ex) {
+
+        Map<String, String> errors = new HashMap<>();
+
+        ex.getBindingResult().getAllErrors().forEach(error -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+
+            errors.put(fieldName, errorMessage);
+        });
+
+        Map<String, Object> response = new HashMap<>();
+
+        response.put("status", 400);
+        response.put("message", "Validation failed");
+        response.put("errors", errors);
+
+        return ResponseEntity.badRequest().body(response);
     }
 }

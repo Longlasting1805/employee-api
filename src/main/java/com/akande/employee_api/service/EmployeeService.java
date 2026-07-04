@@ -4,6 +4,8 @@ import com.akande.employee_api.model.Employee;
 import com.akande.employee_api.repository.EmployeeRepository;
 import org.springframework.stereotype.Service;
 import com.akande.employee_api.exception.EmployeeNotFoundException;
+import com.akande.employee_api.dto.EmployeeRequest;
+import com.akande.employee_api.dto.EmployeeResponse;
 
 import java.util.Optional;
 import java.util.List;
@@ -17,13 +19,32 @@ public class EmployeeService {
         this.employeeRepository = employeeRepository;
     }
 
-    public Employee saveEmployee(Employee employee) {
-        return employeeRepository.save(employee);
+    public EmployeeResponse saveEmployee(EmployeeRequest request) {
+
+        Employee employee = new Employee();
+
+        employee.setFirstName(request.getFirstName());
+        employee.setLastName(request.getLastName());
+        employee.setEmail(request.getEmail());
+        employee.setPhoneNumber(request.getPhoneNumber());
+
+        Employee savedEmployee = employeeRepository.save(employee);
+
+        EmployeeResponse response = new EmployeeResponse();
+
+        response.setId(savedEmployee.getId());
+        response.setFirstName(savedEmployee.getFirstName());
+        response.setLastName(savedEmployee.getLastName());
+        response.setEmail(savedEmployee.getEmail());
+        response.setPhoneNumber(savedEmployee.getPhoneNumber());
+
+        return response;
     }
 
     public List<Employee> getAllEmployees() {
         return employeeRepository.findAll();
     }
+
 
     public Employee getEmployeeById(String id) {
         return employeeRepository
@@ -53,4 +74,6 @@ public class EmployeeService {
 
         employeeRepository.delete(employee);
     }
+
+
 }
