@@ -25,18 +25,19 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public List<Employee> getAllEmployees() {
+    public List<EmployeeResponse> getAllEmployees() {
         return employeeService.getAllEmployees();
     }
 
     @GetMapping("/{id}")
-    public Employee getEmployeeById(@PathVariable String id) {
+    public EmployeeResponse  getEmployeeById(@PathVariable String id) {
         return employeeService.getEmployeeById(id);
     }
 
     @PutMapping("/{id}")
-    public Employee updateEmployee(@PathVariable String id,
-                                   @RequestBody Employee employee) {
+    public EmployeeResponse updateEmployee(
+            @PathVariable String id,
+            @Valid @RequestBody EmployeeRequest employee) {
 
         return employeeService.updateEmployee(id, employee);
     }
