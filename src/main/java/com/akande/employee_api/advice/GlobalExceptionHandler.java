@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import com.akande.employee_api.exception.UserAlreadyExistsException;
+import com.akande.employee_api.exception.InvalidCredentialsException;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -61,5 +62,17 @@ public class GlobalExceptionHandler {
         response.put("message", ex.getMessage());
 
         return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<Map<String, Object>> handleInvalidCredentialsException(
+            InvalidCredentialsException ex) {
+
+        Map<String, Object> response = new HashMap<>();
+
+        response.put("status", 401);
+        response.put("message", ex.getMessage());
+
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 }

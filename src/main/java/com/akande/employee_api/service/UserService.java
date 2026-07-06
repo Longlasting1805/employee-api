@@ -7,6 +7,9 @@ import com.akande.employee_api.enums.Role;
 import com.akande.employee_api.exception.UserAlreadyExistsException;
 import com.akande.employee_api.model.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import com.akande.employee_api.dto.LoginRequest;
+import com.akande.employee_api.exception.InvalidCredentialsException;
+
 
 @Service
 public class UserService {
@@ -44,6 +47,23 @@ public class UserService {
         userRepository.save(user);
 
         return "User registered successfully.";
+
+    }
+
+    public String login(LoginRequest request) {
+
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() ->
+                        new InvalidCredentialsException("Invalid email or password.")
+                );
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+
+            throw new InvalidCredentialsException("Invalid email or password.");
+
+        }
+
+        return "Login successful.";
 
     }
 
