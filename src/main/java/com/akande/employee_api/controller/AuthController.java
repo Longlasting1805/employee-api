@@ -5,6 +5,7 @@ import com.akande.employee_api.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import com.akande.employee_api.dto.LoginRequest;
+import com.akande.employee_api.dto.LoginResponse;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -24,7 +25,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@Valid @RequestBody LoginRequest request) {
+    public LoginResponse login(@Valid @RequestBody LoginRequest request) {
 
         return userService.login(request);
 

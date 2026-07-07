@@ -9,6 +9,8 @@ import com.akande.employee_api.model.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import com.akande.employee_api.dto.LoginRequest;
 import com.akande.employee_api.exception.InvalidCredentialsException;
+import com.akande.employee_api.security.JwtService;
+import com.akande.employee_api.dto.LoginResponse;
 
 
 @Service
@@ -16,12 +18,15 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     public UserService(UserRepository userRepository,
-                       PasswordEncoder passwordEncoder) {
+                       PasswordEncoder passwordEncoder,
+                       JwtService jwtService) {
 
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     public String register(RegisterRequest request) {
@@ -50,7 +55,7 @@ public class UserService {
 
     }
 
-    public String login(LoginRequest request) {
+    public LoginResponse login(LoginRequest request) {
 
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() ->
@@ -63,7 +68,9 @@ public class UserService {
 
         }
 
-        return "Login successful.";
+        String token = jwtService.generateToken(user);
+
+        return new LoginResponse(token);
 
     }
 
