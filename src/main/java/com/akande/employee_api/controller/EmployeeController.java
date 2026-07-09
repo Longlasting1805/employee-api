@@ -8,6 +8,7 @@ import com.akande.employee_api.exception.EmployeeNotFoundException;
 import com.akande.employee_api.dto.EmployeeRequest;
 import com.akande.employee_api.dto.EmployeeResponse;
 import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/api/employees")
@@ -19,6 +20,7 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public EmployeeResponse saveEmployee(@Valid @RequestBody EmployeeRequest employee) {
         return employeeService.saveEmployee(employee);
@@ -34,6 +36,7 @@ public class EmployeeController {
         return employeeService.getEmployeeById(id);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public EmployeeResponse updateEmployee(
             @PathVariable String id,
@@ -42,6 +45,7 @@ public class EmployeeController {
         return employeeService.updateEmployee(id, employee);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteEmployee(@PathVariable String id) {
 

@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 import com.akande.employee_api.model.User;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.io.Decoders;
+import java.util.function.Function;
 
 import java.security.Key;
 import java.util.Date;
@@ -22,10 +25,11 @@ public class JwtService {
 
     private Key getSigningKey() {
 
-        return Keys.hmacShaKeyFor(secret.getBytes());
+        byte[] keyBytes = Decoders.BASE64.decode(secret);
+
+        return Keys.hmacShaKeyFor(keyBytes);
 
     }
-
     public String generateToken(User user) {
 
         return Jwts.builder()
@@ -37,5 +41,52 @@ public class JwtService {
                 .compact();
 
     }
+
+    public Claims extractAllClaims(String token) {
+
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+    }
+
+    public <T> T extractClaim(String token,
+                              Function<Claims, T> claimsResolver) {
+
+        Claims claims = extractAllClaims(token);
+
+        return claimsResolver.apply(claims);
+
+    }
+
+    public String extractUsername(String token) {
+
+        return extractClaim(token, Claims::getSubject);
+
+    }
+
+    public boolean isTokenValid(String token, User user) {
+
+        String username = extractUsername(token);
+
+        return username.equals(user.getEmail()) && !isTokenExpired(token);
+
+    }
+
+    private boolean isTokenExpired(String token) {
+
+        return extractExpiration(token).before(new Date());
+
+    }
+
+    public Date extractExpiration(String token) {
+
+        return extractClaim(token, Claims::getExpiration);
+
+    }
+
+
 
 }
