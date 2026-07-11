@@ -32,11 +32,20 @@ public class EmployeeController {
 
             @RequestParam(defaultValue = "0") int page,
 
-            @RequestParam(defaultValue = "5") int size
+            @RequestParam(defaultValue = "5") int size,
+
+            @RequestParam(defaultValue = "firstName") String sortBy,
+
+            @RequestParam(defaultValue = "asc") String direction
 
     ) {
 
-        return employeeService.getAllEmployees(page, size);
+        return employeeService.getAllEmployees(
+                page,
+                size,
+                sortBy,
+                direction
+        );
 
     }
 

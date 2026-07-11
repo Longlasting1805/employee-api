@@ -10,6 +10,7 @@ import com.akande.employee_api.exception.DuplicateEmployeeException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.util.Optional;
 import java.util.List;
@@ -45,10 +46,16 @@ public class EmployeeService {
 
     public Page<EmployeeResponse> getAllEmployees(
             int page,
-            int size
+            int size,
+            String sortBy,
+            String direction
     ) {
 
-        Pageable pageable = PageRequest.of(page, size);
+        Sort sort = direction.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
 
         return employeeRepository
                 .findAll(pageable)
