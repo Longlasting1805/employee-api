@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import com.akande.employee_api.exception.UserAlreadyExistsException;
 import com.akande.employee_api.exception.InvalidCredentialsException;
+import com.akande.employee_api.exception.DuplicateEmployeeException;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -55,6 +56,18 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<Map<String, Object>> handleUserAlreadyExistsException(
             UserAlreadyExistsException ex) {
+
+        Map<String, Object> response = new HashMap<>();
+
+        response.put("status", 409);
+        response.put("message", ex.getMessage());
+
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(DuplicateEmployeeException.class)
+    public ResponseEntity<Map<String, Object>> handleDuplicateEmployeeException(
+            DuplicateEmployeeException ex) {
 
         Map<String, Object> response = new HashMap<>();
 

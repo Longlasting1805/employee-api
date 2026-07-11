@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.akande.employee_api.exception.EmployeeNotFoundException;
 import com.akande.employee_api.dto.EmployeeRequest;
 import com.akande.employee_api.dto.EmployeeResponse;
+import com.akande.employee_api.exception.DuplicateEmployeeException;
 
 import java.util.Optional;
 import java.util.List;
@@ -20,6 +21,12 @@ public class EmployeeService {
     }
 
     public EmployeeResponse saveEmployee(EmployeeRequest request) {
+
+        if (employeeRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new DuplicateEmployeeException(
+                    "An employee with this email already exists."
+            );
+        }
 
         Employee employee = new Employee();
 
@@ -90,6 +97,8 @@ public class EmployeeService {
 
         return response;
     }
+
+
 
 
 }
