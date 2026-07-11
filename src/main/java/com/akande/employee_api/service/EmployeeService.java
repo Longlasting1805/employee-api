@@ -7,6 +7,9 @@ import com.akande.employee_api.exception.EmployeeNotFoundException;
 import com.akande.employee_api.dto.EmployeeRequest;
 import com.akande.employee_api.dto.EmployeeResponse;
 import com.akande.employee_api.exception.DuplicateEmployeeException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.Optional;
 import java.util.List;
@@ -40,15 +43,17 @@ public class EmployeeService {
         return mapToEmployeeResponse(savedEmployee);
     }
 
-    public List<EmployeeResponse> getAllEmployees() {
+    public Page<EmployeeResponse> getAllEmployees(
+            int page,
+            int size
+    ) {
 
-        List<Employee> employees = employeeRepository.findAll();
+        Pageable pageable = PageRequest.of(page, size);
 
-        return employees.stream()
-                .map(this::mapToEmployeeResponse)
-                .toList();
+        return employeeRepository
+                .findAll(pageable)
+                .map(this::mapToEmployeeResponse);
     }
-
 
     public EmployeeResponse getEmployeeById(String id) {
 
@@ -97,8 +102,5 @@ public class EmployeeService {
 
         return response;
     }
-
-
-
 
 }

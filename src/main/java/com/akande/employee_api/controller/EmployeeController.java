@@ -9,6 +9,7 @@ import com.akande.employee_api.dto.EmployeeRequest;
 import com.akande.employee_api.dto.EmployeeResponse;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.data.domain.Page;
 
 @RestController
 @RequestMapping("/api/employees")
@@ -27,8 +28,16 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public List<EmployeeResponse> getAllEmployees() {
-        return employeeService.getAllEmployees();
+    public Page<EmployeeResponse> getAllEmployees(
+
+            @RequestParam(defaultValue = "0") int page,
+
+            @RequestParam(defaultValue = "5") int size
+
+    ) {
+
+        return employeeService.getAllEmployees(page, size);
+
     }
 
     @GetMapping("/{id}")
