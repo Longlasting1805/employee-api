@@ -10,6 +10,7 @@ import com.akande.employee_api.dto.EmployeeResponse;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.data.domain.Page;
+import com.akande.employee_api.dto.EmployeePatchRequest;
 
 @RestController
 @RequestMapping("/api/employees")
@@ -86,6 +87,20 @@ public class EmployeeController {
             @Valid @RequestBody EmployeeRequest employee) {
 
         return employeeService.updateEmployee(id, employee);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping("/{id}")
+    public EmployeeResponse patchEmployee(
+
+            @PathVariable String id,
+
+            @RequestBody EmployeePatchRequest request
+
+    ) {
+
+        return employeeService.patchEmployee(id, request);
+
     }
 
     @PreAuthorize("hasRole('ADMIN')")

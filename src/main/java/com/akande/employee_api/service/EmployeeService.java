@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import com.akande.employee_api.dto.EmployeePatchRequest;
+import com.akande.employee_api.exception.DuplicateEmployeeException;
 
 
 import java.util.Optional;
@@ -107,6 +109,52 @@ public class EmployeeService {
         Employee updatedEmployee = employeeRepository.save(existingEmployee);
 
         return mapToEmployeeResponse(updatedEmployee);
+    }
+
+    public EmployeeResponse patchEmployee(
+            String id,
+            EmployeePatchRequest request
+    ) {
+
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() ->
+                        new EmployeeNotFoundException(
+                                "Employee not found with id: " + id
+                        )
+                );
+
+        if (request.getFirstName() != null) {
+            employee.setFirstName(request.getFirstName());
+        }
+
+        if (request.getLastName() != null) {
+            employee.setLastName(request.getLastName());
+        }
+
+        if (request.getEmail() != null) {
+
+            employeeRepository.findByEmail(request.getEmail())
+                    .ifPresent(existing -> {
+
+                        if (!existing.getId().equals(id)) {
+                            throw new DuplicateEmployeeException(
+                                    "An employee with this email already exists."
+                            );
+                        }
+
+                    });
+
+            employee.setEmail(request.getEmail());
+        }
+
+        if (request.getPhoneNumber() != null) {
+            employee.setPhoneNumber(request.getPhoneNumber());
+        }
+
+        Employee updated = employeeRepository.save(employee);
+
+        return mapToEmployeeResponse(updated);
+
     }
 
     public void deleteEmployee(String id) {
