@@ -49,6 +49,31 @@ public class EmployeeController {
 
     }
 
+    @GetMapping("/search")
+    public Page<EmployeeResponse> searchEmployees(
+
+            @RequestParam String keyword,
+
+            @RequestParam(defaultValue = "0") int page,
+
+            @RequestParam(defaultValue = "5") int size,
+
+            @RequestParam(defaultValue = "firstName") String sortBy,
+
+            @RequestParam(defaultValue = "asc") String direction
+
+    ) {
+
+        return employeeService.searchEmployees(
+                keyword,
+                page,
+                size,
+                sortBy,
+                direction
+        );
+
+    }
+
     @GetMapping("/{id}")
     public EmployeeResponse  getEmployeeById(@PathVariable String id) {
         return employeeService.getEmployeeById(id);
