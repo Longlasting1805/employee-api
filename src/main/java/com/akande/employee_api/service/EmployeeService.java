@@ -12,7 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import com.akande.employee_api.dto.EmployeePatchRequest;
-import com.akande.employee_api.exception.DuplicateEmployeeException;
 
 
 import java.util.Optional;
@@ -175,6 +174,8 @@ public class EmployeeService {
         response.setLastName(employee.getLastName());
         response.setEmail(employee.getEmail());
         response.setPhoneNumber(employee.getPhoneNumber());
+        response.setCreatedAt(employee.getCreatedAt());
+        response.setUpdatedAt(employee.getUpdatedAt());
 
         return response;
     }

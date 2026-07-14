@@ -1,0 +1,23 @@
+services:
+
+  mongodb:
+    image: mongo:8
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+
+    volumes:
+      - mongo-data:/data/db
+
+  employee-api:
+    build: .
+    container_name: employee-api
+
+    ports:
+      - "8080:8080"
+
+    depends_on:
+      - mongodb
+
+volumes:
+  mongo-data:
