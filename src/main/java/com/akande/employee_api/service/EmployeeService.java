@@ -102,6 +102,16 @@ public class EmployeeService {
 
         existingEmployee.setFirstName(request.getFirstName());
         existingEmployee.setLastName(request.getLastName());
+        employeeRepository.findByEmail(request.getEmail())
+                .ifPresent(employee -> {
+
+                    if (!employee.getId().equals(id)) {
+                        throw new DuplicateEmployeeException(
+                                "An employee with this email already exists."
+                        );
+                    }
+
+                });
         existingEmployee.setEmail(request.getEmail());
         existingEmployee.setPhoneNumber(request.getPhoneNumber());
 
