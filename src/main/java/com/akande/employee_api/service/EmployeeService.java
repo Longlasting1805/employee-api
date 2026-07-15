@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import com.akande.employee_api.dto.EmployeePatchRequest;
+import com.akande.employee_api.mapper.EmployeeMapper;
 
 
 import java.util.Optional;
@@ -21,9 +22,14 @@ import java.util.List;
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+    private final EmployeeMapper employeeMapper;
 
-    public EmployeeService(EmployeeRepository employeeRepository) {
+    public EmployeeService(
+            EmployeeRepository employeeRepository,
+            EmployeeMapper employeeMapper
+    ) {
         this.employeeRepository = employeeRepository;
+        this.employeeMapper = employeeMapper;
     }
 
     public EmployeeResponse saveEmployee(EmployeeRequest request) {
@@ -34,16 +40,11 @@ public class EmployeeService {
             );
         }
 
-        Employee employee = new Employee();
-
-        employee.setFirstName(request.getFirstName());
-        employee.setLastName(request.getLastName());
-        employee.setEmail(request.getEmail());
-        employee.setPhoneNumber(request.getPhoneNumber());
+        Employee employee = employeeMapper.toEntity(request);
 
         Employee savedEmployee = employeeRepository.save(employee);
 
-        return mapToEmployeeResponse(savedEmployee);
+        return employeeMapper.toResponse(savedEmployee);
     }
 
     public Page<EmployeeResponse> getAllEmployees(
@@ -61,8 +62,7 @@ public class EmployeeService {
 
         return employeeRepository
                 .findAll(pageable)
-                .map(this::mapToEmployeeResponse);
-    }
+                .map(employeeMapper::toResponse);    }
 
     public Page<EmployeeResponse> searchEmployees(
             String keyword,
@@ -80,8 +80,7 @@ public class EmployeeService {
 
         return employeeRepository
                 .searchEmployees(keyword, pageable)
-                .map(this::mapToEmployeeResponse);
-
+                .map(employeeMapper::toResponse);
     }
 
     public EmployeeResponse getEmployeeById(String id) {
@@ -91,7 +90,7 @@ public class EmployeeService {
                 .orElseThrow(() ->
                         new EmployeeNotFoundException("Employee not found with id: " + id));
 
-        return mapToEmployeeResponse(employee);
+        return employeeMapper.toResponse(employee);
     }
 
     public EmployeeResponse updateEmployee(String id, EmployeeRequest request) {
@@ -117,7 +116,7 @@ public class EmployeeService {
 
         Employee updatedEmployee = employeeRepository.save(existingEmployee);
 
-        return mapToEmployeeResponse(updatedEmployee);
+        return employeeMapper.toResponse(updatedEmployee);
     }
 
     public EmployeeResponse patchEmployee(
@@ -162,7 +161,7 @@ public class EmployeeService {
 
         Employee updated = employeeRepository.save(employee);
 
-        return mapToEmployeeResponse(updated);
+        return employeeMapper.toResponse(updated);
 
     }
 
@@ -173,21 +172,6 @@ public class EmployeeService {
                         new EmployeeNotFoundException("Employee not found with id: " + id));
 
         employeeRepository.delete(employee);
-    }
-
-    private EmployeeResponse mapToEmployeeResponse(Employee employee) {
-
-        EmployeeResponse response = new EmployeeResponse();
-
-        response.setId(employee.getId());
-        response.setFirstName(employee.getFirstName());
-        response.setLastName(employee.getLastName());
-        response.setEmail(employee.getEmail());
-        response.setPhoneNumber(employee.getPhoneNumber());
-        response.setCreatedAt(employee.getCreatedAt());
-        response.setUpdatedAt(employee.getUpdatedAt());
-
-        return response;
     }
 
 }
