@@ -6,6 +6,7 @@ import com.akande.employee_api.model.Employee;
 import com.akande.employee_api.repository.EmployeeRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import com.akande.employee_api.mapper.EmployeeMapper;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -24,6 +25,9 @@ class EmployeeServiceTest {
 
     @Mock
     private EmployeeRepository employeeRepository;
+
+    @Mock
+    private EmployeeMapper employeeMapper;
 
     @InjectMocks
     private EmployeeService employeeService;
@@ -49,6 +53,25 @@ class EmployeeServiceTest {
 
         when(employeeRepository.save(any(Employee.class)))
                 .thenReturn(savedEmployee);
+
+        Employee employee = new Employee();
+        employee.setFirstName(request.getFirstName());
+        employee.setLastName(request.getLastName());
+        employee.setEmail(request.getEmail());
+        employee.setPhoneNumber(request.getPhoneNumber());
+
+        when(employeeMapper.toEntity(request))
+                .thenReturn(employee);
+
+        EmployeeResponse responseDto = new EmployeeResponse();
+        responseDto.setId("123");
+        responseDto.setFirstName("Kenny");
+        responseDto.setLastName("Akande");
+        responseDto.setEmail("kenny@example.com");
+        responseDto.setPhoneNumber("08123456789");
+
+        when(employeeMapper.toResponse(savedEmployee))
+                .thenReturn(responseDto);
 
         EmployeeResponse response = employeeService.saveEmployee(request);
 
@@ -101,6 +124,16 @@ class EmployeeServiceTest {
         when(employeeRepository.findById("123"))
                 .thenReturn(Optional.of(employee));
 
+        EmployeeResponse responseDto = new EmployeeResponse();
+        responseDto.setId("123");
+        responseDto.setFirstName("Kenny");
+        responseDto.setLastName("Akande");
+        responseDto.setEmail("kenny@example.com");
+        responseDto.setPhoneNumber("08123456789");
+
+        when(employeeMapper.toResponse(employee))
+                .thenReturn(responseDto);
+
         EmployeeResponse response = employeeService.getEmployeeById("123");
 
         assertNotNull(response);
@@ -146,8 +179,21 @@ class EmployeeServiceTest {
         when(employeeRepository.findById("123"))
                 .thenReturn(Optional.of(existingEmployee));
 
+        when(employeeRepository.findByEmail(request.getEmail()))
+                .thenReturn(Optional.empty());
+
         when(employeeRepository.save(any(Employee.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
+
+        EmployeeResponse responseDto = new EmployeeResponse();
+        responseDto.setId("123");
+        responseDto.setFirstName("John");
+        responseDto.setLastName("Smith");
+        responseDto.setEmail("john@example.com");
+        responseDto.setPhoneNumber("08012345678");
+
+        when(employeeMapper.toResponse(any(Employee.class)))
+                .thenReturn(responseDto);
 
         EmployeeResponse response = employeeService.updateEmployee("123", request);
 
@@ -159,7 +205,9 @@ class EmployeeServiceTest {
 
         verify(employeeRepository).findById("123");
         verify(employeeRepository).save(existingEmployee);
+
     }
+
 
     @Test
     void updateEmployee_shouldThrowExceptionWhenEmployeeDoesNotExist() {
