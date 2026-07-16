@@ -11,9 +11,11 @@ import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.data.domain.Page;
 import com.akande.employee_api.dto.EmployeePatchRequest;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
 @RequestMapping("/api/employees")
+@SecurityRequirement(name = "Bearer Authentication")
 public class EmployeeController {
 
     private final EmployeeService employeeService;

@@ -1,5 +1,6 @@
 package com.akande.employee_api.dto;
 
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,6 +23,9 @@ public class EmployeeRequest {
     private String email;
 
     @NotBlank(message = "Phone number is required")
-    @Size(min = 11, max = 11, message = "Phone number must be exactly 11 digits")
+    @Pattern(
+            regexp = "^\\d{11}$",
+            message = "Phone number must contain exactly 11 digits"
+    )
     private String phoneNumber;
 }

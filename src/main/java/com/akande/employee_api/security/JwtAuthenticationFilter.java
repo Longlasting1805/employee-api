@@ -42,7 +42,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
 
         String authHeader = request.getHeader("Authorization");
-
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
@@ -62,8 +61,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             );
             return;
         }
-
-        System.out.println("Email from JWT: " + email);
 
         User user = userRepository.findByEmail(email).orElse(null);
 
@@ -91,8 +88,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         null,
                         user.getAuthorities()
                 );
-
-        System.out.println("Authorities: " + user.getAuthorities());
 
         authentication.setDetails(
                 new WebAuthenticationDetailsSource().buildDetails(request)
