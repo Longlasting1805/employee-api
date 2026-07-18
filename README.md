@@ -128,8 +128,6 @@ Coming soon
 ## 🔮 Future Improvements
 
 - React Admin Dashboard
-- Pagination
-- Search & Filtering
 - File Uploads
 - Email Notifications
 - Audit Logs
