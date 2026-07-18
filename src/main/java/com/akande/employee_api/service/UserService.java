@@ -57,6 +57,8 @@ public class UserService {
 
     public LoginResponse login(LoginRequest request) {
 
+        System.out.println("========== LOGIN METHOD CALLED ==========");
+
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() ->
                         new InvalidCredentialsException("Invalid email or password.")
