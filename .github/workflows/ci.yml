@@ -1,5 +1,10 @@
 name: Employee API CI
 
+env:
+  MONGODB_URI: ${{ secrets.MONGODB_URI }}
+  JWT_SECRET: ${{ secrets.JWT_SECRET }}
+  JWT_EXPIRATION: ${{ secrets.JWT_EXPIRATION }}
+
 on:
   push:
     branches:
@@ -46,3 +51,4 @@ jobs:
 
       - name: Build and Test
         run: ./mvnw clean verify
+
