@@ -1,5 +1,7 @@
 # Employee API
 
+[![Employee API CI](https://github.com/Longlasting1805/employee-api/actions/workflows/ci.yml/badge.svg)](https://github.com/Longlasting1805/employee-api/actions/workflows/ci.yml)
+
 A production-ready Employee Management REST API built with Spring Boot 3, MongoDB Atlas, JWT Authentication, Role-Based Access Control (RBAC), Docker, and GitHub Actions CI/CD.
 
 ---
