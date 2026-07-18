@@ -136,6 +136,6 @@ Coming soon
 
 ## 👨‍💻 Author
 
-**Akande Al-Ameen**
+**Akande Kehinde**
 
 Backend Engineer | Java | Spring Boot | React | MongoDB
