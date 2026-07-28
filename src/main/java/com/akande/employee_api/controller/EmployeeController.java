@@ -12,6 +12,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.data.domain.Page;
 import com.akande.employee_api.dto.EmployeePatchRequest;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import com.akande.employee_api.service.ExportService;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("/api/employees")
@@ -20,10 +24,36 @@ public class EmployeeController {
 
     private final EmployeeService employeeService;
 
-    public EmployeeController(EmployeeService employeeService) {
+    private final ExportService exportService;
+
+    public EmployeeController(
+            EmployeeService employeeService,
+            ExportService exportService
+    ) {
+
         this.employeeService = employeeService;
+        this.exportService = exportService;
+
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/export")
+    public ResponseEntity<String> exportEmployees() {
+
+        String csv = exportService.exportEmployeesToCsv();
+
+        return ResponseEntity.ok()
+
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=employees.csv"
+                )
+
+                .contentType(MediaType.TEXT_PLAIN)
+
+                .body(csv);
+
+    }
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public EmployeeResponse saveEmployee(@Valid @RequestBody EmployeeRequest employee) {
