@@ -6,6 +6,12 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import com.akande.employee_api.dto.LoginRequest;
 import com.akande.employee_api.dto.LoginResponse;
+import com.akande.employee_api.dto.UserResponse;
+import com.akande.employee_api.model.User;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
+import org.springframework.security.core.Authentication;
+import com.akande.employee_api.dto.UpdateProfileRequest;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -28,6 +34,28 @@ public class AuthController {
     public LoginResponse login(@Valid @RequestBody LoginRequest request) {
 
         return userService.login(request);
+
+    }
+
+    @GetMapping("/me")
+    public UserResponse getCurrentUser(
+            @AuthenticationPrincipal User user
+    ) {
+
+        return userService.getCurrentUser(user);
+
+    }
+
+    @PutMapping("/me")
+    public UserResponse updateProfile(
+            Authentication authentication,
+            @Valid @RequestBody UpdateProfileRequest request
+    ) {
+
+        return userService.updateProfile(
+                authentication.getName(),
+                request
+        );
 
     }
 
