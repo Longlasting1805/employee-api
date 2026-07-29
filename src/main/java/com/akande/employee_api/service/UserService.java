@@ -13,6 +13,7 @@ import com.akande.employee_api.security.JwtService;
 import com.akande.employee_api.dto.LoginResponse;
 import com.akande.employee_api.dto.UserResponse;
 import com.akande.employee_api.dto.UpdateProfileRequest;
+import com.akande.employee_api.dto.ChangePasswordRequest;
 
 
 @Service
@@ -122,6 +123,37 @@ public class UserService {
                 savedUser.getEmail(),
                 savedUser.getRole()
         );
+
+    }
+
+    public String changePassword(
+            String currentEmail,
+            ChangePasswordRequest request
+    ) {
+
+        User user = userRepository.findByEmail(currentEmail)
+                .orElseThrow(() ->
+                        new InvalidCredentialsException("User not found.")
+                );
+
+        if (!passwordEncoder.matches(
+                request.getCurrentPassword(),
+                user.getPassword()
+        )) {
+
+            throw new InvalidCredentialsException(
+                    "Current password is incorrect."
+            );
+
+        }
+
+        user.setPassword(
+                passwordEncoder.encode(request.getNewPassword())
+        );
+
+        userRepository.save(user);
+
+        return "Password changed successfully.";
 
     }
 

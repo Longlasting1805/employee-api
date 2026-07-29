@@ -9,6 +9,7 @@ import com.akande.employee_api.dto.LoginResponse;
 import com.akande.employee_api.dto.UserResponse;
 import com.akande.employee_api.model.User;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import com.akande.employee_api.dto.ChangePasswordRequest;
 
 import org.springframework.security.core.Authentication;
 import com.akande.employee_api.dto.UpdateProfileRequest;
@@ -53,6 +54,19 @@ public class AuthController {
     ) {
 
         return userService.updateProfile(
+                authentication.getName(),
+                request
+        );
+
+    }
+
+    @PutMapping("/change-password")
+    public String changePassword(
+            Authentication authentication,
+            @Valid @RequestBody ChangePasswordRequest request
+    ) {
+
+        return userService.changePassword(
                 authentication.getName(),
                 request
         );
