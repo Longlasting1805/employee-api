@@ -18,7 +18,7 @@ public class CorsConfig {
 
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:5173",
-                "https://employeemanagementplatform.netlify.app"
+                "https://employee-management-ui-oob5.onrender.com"
         ));
 
         configuration.setAllowedMethods(List.of(
