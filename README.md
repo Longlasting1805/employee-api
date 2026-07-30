@@ -1,67 +1,117 @@
-# Employee API
+# Employee Management Platform API
 
-[![Employee API CI](https://github.com/Longlasting1805/employee-api/actions/workflows/ci.yml/badge.svg)](https://github.com/Longlasting1805/employee-api/actions/workflows/ci.yml)
+A production-ready REST API powering the **Employee Management Platform**.
 
-A production-ready Employee Management REST API built with Spring Boot 3, MongoDB Atlas, JWT Authentication, Role-Based Access Control (RBAC), Docker, and GitHub Actions CI/CD.
+Built with **Spring Boot 3**, **MongoDB Atlas**, **Spring Security**, and **JWT Authentication**, the API provides secure employee management through role-based access control (RBAC).
 
 ---
 
-## 🚀 Features
+# 🌐 Live Application
+
+### Frontend
+
+https://employee-management-ui-oob5.onrender.com/
+
+### Backend API
+
+https://employee-api-6lau.onrender.com/
+
+### Swagger Documentation
+
+https://employee-api-6lau.onrender.com/swagger-ui/index.html
+
+---
+
+# 📌 Overview
+
+The Employee Management Platform enables organizations to securely manage employees through a modern web application.
+
+Administrators can:
+
+- Create employees
+- View employees
+- Update employee records
+- Delete employees
+- Search employees
+- Sort employees
+- View paginated employee lists
+
+Employees can:
+
+- Login securely
+- View their profile
+- Update their profile
+- Change their password
+
+This project demonstrates modern backend architecture, REST API development, JWT authentication, role-based authorization, cloud deployment, Docker, and production-ready software engineering practices.
+
+---
+
+# 🚀 Features
 
 - JWT Authentication
 - Role-Based Access Control (ADMIN & EMPLOYEE)
 - Employee CRUD Operations
+- Employee Search
+- Employee Sorting
+- Employee Pagination
+- Profile Management
+- Change Password
 - Swagger/OpenAPI Documentation
 - MongoDB Atlas Integration
 - Docker Support
 - GitHub Actions CI/CD
 - Global Exception Handling
 - Input Validation
-- Unit & Integration Testing
 
 ---
 
-## 🛠 Tech Stack
+# 🛠 Tech Stack
 
 - Java 21
 - Spring Boot 3
-- MongoDB Atlas
 - Spring Security
 - JWT
+- MongoDB Atlas
 - Maven
 - Docker
-- GitHub Actions
 - Swagger/OpenAPI
+- GitHub Actions
 
 ---
 
-## 📂 Project Structure
+# 📂 Project Structure
 
 ```text
 src
+├── advice
 ├── config
 ├── controller
 ├── dto
+├── enums
 ├── exception
+├── mapper
 ├── model
 ├── repository
 ├── security
 ├── service
-└── advice
+└── util
 ```
 
 ---
 
-## 🔐 Authentication
+# 🔐 Authentication
 
-The API uses JWT authentication.
+The API uses JWT Authentication.
 
-Public endpoints:
+Public endpoints
 
-- POST /api/auth/register
-- POST /api/auth/login
+```
+POST /api/auth/register
+POST /api/auth/login
+```
 
-Protected endpoints require:
+Protected endpoints require
 
 ```
 Authorization: Bearer <JWT_TOKEN>
@@ -69,9 +119,15 @@ Authorization: Bearer <JWT_TOKEN>
 
 ---
 
-## 📚 API Documentation
+# 📚 API Documentation
 
-After starting the application:
+Swagger UI
+
+```
+https://employee-api-6lau.onrender.com/swagger-ui/index.html
+```
+
+Local
 
 ```
 http://localhost:8080/swagger-ui/index.html
@@ -79,7 +135,21 @@ http://localhost:8080/swagger-ui/index.html
 
 ---
 
-## 🐳 Running with Docker
+# 🐳 Running with Docker
+
+Clone the repository
+
+```bash
+git clone https://github.com/Longlasting1805/employee-api.git
+```
+
+Navigate into the project
+
+```bash
+cd employee-api
+```
+
+Run
 
 ```bash
 docker compose up --build
@@ -87,9 +157,21 @@ docker compose up --build
 
 ---
 
-## 🧪 Testing
+# ⚙️ Environment Variables
 
-Run all tests:
+Create a `.env` file.
+
+Required variables
+
+```env
+MONGODB_URI=
+JWT_SECRET=
+JWT_EXPIRATION=86400000
+```
+
+---
+
+# 🧪 Running Tests
 
 ```bash
 ./mvnw test
@@ -103,39 +185,85 @@ mvn test
 
 ---
 
-## ⚙️ CI/CD
+# 🚀 Deployment
 
-GitHub Actions automatically:
+Frontend
 
-- Builds the application
-- Runs all tests
-- Verifies every push and pull request
+https://employee-management-ui-oob5.onrender.com/
 
----
+Backend
 
-## 📸 Screenshots
+https://employee-api-6lau.onrender.com/
 
-Coming soon
+Database
 
-- Swagger UI
-- Login
-- Admin Dashboard
-- Employee CRUD
-- GitHub Actions Passing
+MongoDB Atlas
 
 ---
 
-## 🔮 Future Improvements
+# 🔄 CI/CD
 
-- React Admin Dashboard
-- File Uploads
+GitHub Actions automatically
+
+- Builds the project
+- Runs tests
+- Verifies every push
+- Verifies every pull request
+
+---
+
+# 📸 Screenshots
+
+## Login
+
+![Login](screenshots/AdminLogin.png)
+
+---
+
+## Dashboard
+
+![Dashboard](screenshots/AdminDashboard.png)
+
+---
+
+## Employee List
+
+![Employees](screenshots/AdminEmployees.png)
+
+---
+
+## Profile
+
+![Profile](screenshots/AdminProfile.png)
+
+---
+
+# 🔮 Future Improvements
+
 - Email Notifications
+- File Upload Support
 - Audit Logs
+- Activity History
+- Employee Avatar Upload
+- Department Management
+- Role Management
+- Analytics Dashboard
+- Export Employees to Excel/PDF
 
 ---
 
-## 👨‍💻 Author
+# 🤝 Frontend Repository
+
+The frontend for this project is available here:
+
+https://github.com/Longlasting1805/employee-management-ui
+
+---
+
+# 👨‍💻 Author
 
 **Akande Kehinde**
 
-Backend Engineer | Java | Spring Boot | React | MongoDB
+Software Engineer
+
+Java • Spring Boot • React • MongoDB • Docker • JWT • REST APIs
