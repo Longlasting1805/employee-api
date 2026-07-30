@@ -232,9 +232,27 @@ GitHub Actions automatically
 
 ---
 
+## Create Employee
+
+![Create Employee](screenshots/AdminAddEmployee.png)
+
+---
+
+## Edit Employee
+
+![Edit Employee](screenshots/AdminEditEmployee.png)
+
+---
+
 ## Profile
 
 ![Profile](screenshots/AdminProfile.png)
+
+---
+
+## Change Password
+
+![Change Password](screenshots/ChangePassword.png)
 
 ---
 
