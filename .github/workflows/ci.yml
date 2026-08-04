@@ -1,4 +1,4 @@
-name: Employee API CI
+name: Employee API CI/CD
 
 env:
   MONGODB_URI: ${{ secrets.MONGODB_URI }}
@@ -9,14 +9,10 @@ on:
   push:
     branches:
       - main
-      - master
-      - develop
 
   pull_request:
     branches:
       - main
-      - master
-      - develop
 
 jobs:
   build:
@@ -25,10 +21,8 @@ jobs:
     services:
       mongodb:
         image: mongo:8
-
         ports:
           - 27017:27017
-
         options: >-
           --health-cmd="mongosh --eval 'db.adminCommand(\"ping\")'"
           --health-interval=10s
@@ -52,3 +46,22 @@ jobs:
       - name: Build and Test
         run: ./mvnw clean verify
 
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /home/ec2-user/employee-api
+            git pull origin main
+            chmod +x mvnw
+            ./mvnw clean package -DskipTests
+            sudo systemctl restart employee-api
+            sudo systemctl status employee-api --no-pager
