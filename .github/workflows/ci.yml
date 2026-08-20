@@ -18,6 +18,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+
+
     services:
       mongodb:
         image: mongo:8
@@ -45,6 +47,8 @@ jobs:
 
       - name: Build and Test
         run: ./mvnw clean verify
+
+        
 
   deploy:
     needs: build

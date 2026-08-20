@@ -39,7 +39,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String path = request.getServletPath();
 
-        return path.startsWith("/api/auth/")
+        return path.equals("/api/auth/login")
+                || path.equals("/api/auth/register")
                 || path.startsWith("/swagger-ui/")
                 || path.startsWith("/v3/api-docs");
     }
@@ -64,6 +65,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             email = jwtService.extractUsername(jwt);
         } catch (JwtException | IllegalArgumentException ex) {
+
+            System.out.println(
+                    "JWT VALIDATION FAILED: "
+                            + ex.getClass().getName()
+                            + " - "
+                            + ex.getMessage()
+            );
+
             authenticationEntryPoint.commence(
                     request,
                     response,
