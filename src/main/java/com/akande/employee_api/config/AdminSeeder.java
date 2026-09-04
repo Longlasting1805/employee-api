@@ -24,9 +24,11 @@ public class AdminSeeder implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-        User admin = userRepository
-                .findByEmail("admin@employeeapi.com")
-                .orElseGet(User::new);
+        if (userRepository.findByEmail("admin@employeeapi.com").isPresent()) {
+            return;
+        }
+
+        User admin = new User();
 
         admin.setFirstName("System");
         admin.setLastName("Administrator");
@@ -37,33 +39,9 @@ public class AdminSeeder implements CommandLineRunner {
         userRepository.save(admin);
 
         System.out.println("=====================================");
-        System.out.println("ADMIN PASSWORD SEEDED/RESET");
+        System.out.println("ADMIN ACCOUNT CREATED SUCCESSFULLY");
         System.out.println("Email: admin@employeeapi.com");
         System.out.println("Password: Admin@123");
         System.out.println("=====================================");
     }
-
-  //  @Override
- //   public void run(String... args) {
-
-//        if (userRepository.findByEmail("admin@employeeapi.com").isPresent()) {
- //           return;
- //       }
-
-  //      User admin = new User();
-
-   //     admin.setFirstName("System");
-      //  admin.setLastName("Administrator");
-      //  admin.setEmail("admin@employeeapi.com");
-   //     admin.setPassword(passwordEncoder.encode("Admin@123"));
-      //  admin.setRole(Role.ADMIN);
-
-    //    userRepository.save(admin);
-
-     //   System.out.println("=====================================");
-    //    System.out.println("ADMIN ACCOUNT CREATED SUCCESSFULLY");
-     //   System.out.println("Email: admin@employeeapi.com");
-     //   System.out.println("Password: Admin@123");
-     //   System.out.println("=====================================");
-   // }
 }
