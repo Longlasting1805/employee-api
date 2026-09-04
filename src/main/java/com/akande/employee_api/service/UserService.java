@@ -77,7 +77,12 @@ public class UserService {
 
     }
 
-    public UserResponse getCurrentUser(User user) {
+    public UserResponse getCurrentUser(String email) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new InvalidCredentialsException("User not found.")
+                );
 
         return new UserResponse(
                 user.getId(),

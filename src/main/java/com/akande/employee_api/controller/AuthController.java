@@ -8,7 +8,6 @@ import com.akande.employee_api.dto.LoginRequest;
 import com.akande.employee_api.dto.LoginResponse;
 import com.akande.employee_api.dto.UserResponse;
 import com.akande.employee_api.model.User;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import com.akande.employee_api.dto.ChangePasswordRequest;
 
 import org.springframework.security.core.Authentication;
@@ -40,10 +39,10 @@ public class AuthController {
 
     @GetMapping("/me")
     public UserResponse getCurrentUser(
-            @AuthenticationPrincipal User user
+            Authentication authentication
     ) {
 
-        return userService.getCurrentUser(user);
+        return userService.getCurrentUser(authentication.getName());
 
     }
 
